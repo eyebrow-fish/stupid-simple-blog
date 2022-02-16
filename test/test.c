@@ -28,7 +28,7 @@ void assert_neq(Test *test, void *expected, void *actual)
 int main(void)
 {
   test_f all_tests[] = {
-      assert_true,
+      can_deserialize_httprequest,
   };
   int num_all_tests = sizeof(all_tests) / sizeof(all_tests[0]);
 

@@ -12,7 +12,7 @@ build:
 
 build-test:
 	mkdir out/test/
-	cc -Wall -o out/test/stupid-simple-blog test/*.c -I src/ -I test/
+	cc -Wall -o out/test/stupid-simple-blog src/httprequest.c test/*.c -I src/ -I test/
 
 run-test:
 	./out/test/stupid-simple-blog

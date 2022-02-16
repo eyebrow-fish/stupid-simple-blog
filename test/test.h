@@ -14,6 +14,6 @@ extern void assert_eq(Test *, void *, void *);
 extern void assert_neq(Test *, void *, void *);
 
 // Our tests.
-void assert_true(Test *);
+void can_deserialize_httprequest(Test *);
 
 #endif
