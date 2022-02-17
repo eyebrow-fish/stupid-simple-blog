@@ -33,6 +33,8 @@ int get_uri_range(int, const char *, int *, int *);
 
 int get_version(int, const char *, int, HttpVersion *);
 
+int get_header_str_range(int, const char *, int *, int *);
+
 int httprequest_deserialize(int, char *, HttpRequest *);
 
 #endif

@@ -11,19 +11,35 @@ int httprequest_deserialize(int srcc, char *srcv, HttpRequest *dest)
 	dest->method = method;
 
 	// Resolve uri.
-	int start, end;
-	err = get_uri_range(srcc, srcv, &start, &end);
+	int uri_s, uri_e;
+	err = get_uri_range(srcc, srcv, &uri_s, &uri_e);
 	if (err != 0)
 		return err;
 	char uri[1024];
-	strncpy(uri, srcv + start, end - start);
+	strncpy(uri, srcv + uri_s, uri_e - uri_s);
 	dest->uri = uri;
 
+	// Resolve version.
 	HttpVersion version;
-	err = get_version(srcc, srcv, end, &version);
+	err = get_version(srcc, srcv, uri_e, &version);
 	if (err != 0)
 		return err;
 	dest->version = version;
+
+	// Resolve header_str.
+	int header_s, header_e;
+	err = get_header_str_range(srcc, srcv, &header_s, &header_e);
+	if (err != 0)
+		return err;
+	char header_str[65536];
+	strncpy(header_str, srcv + header_s, header_e - header_s);
+	dest->header_str = header_str;
+
+	// Resolve body_str.
+	int body_s = header_e + 4; // Prepended with \r\n\r\n.
+	char body_str[65536];
+	strncpy(body_str, srcv + body_s, srcc - body_s);
+	dest->body_str = body_str;
 
 	return 0;
 }
@@ -139,6 +155,35 @@ int get_version(int srcc, const char *srcv, int uri_end, HttpVersion *version)
 			}
 			break;
 	}
+
+	return 0;
+}
+
+int get_header_str_range(int srcc, const char *srcv, int *start, int *end)
+{
+	int s = 0;
+	int e = 0;
+	for (int i = 0; i < srcc; i++)
+	{
+		if (srcv[i] == '\r' && srcv[i + 1] == '\n')
+		{
+			if (s == 0 && srcc > i + 2)
+			{
+				s = i + 2;
+			}
+			else if (srcv[i] == '\r' && srcv[i + 1] == '\n' && srcv[i + 2] == '\r' && srcv[i + 3] == '\n' )
+			{
+				e = i;
+				break;
+			}
+		}
+	}
+
+	if ((s == 0 || e == 0) && s > e) // Could not find start or end of headers.
+		return -1;
+
+	(*start) = s;
+	(*end) = e;
 
 	return 0;
 }

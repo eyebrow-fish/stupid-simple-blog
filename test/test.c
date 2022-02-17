@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "test.h"
 
 void assert(Test *test, int assertion, char *message)
@@ -7,8 +8,8 @@ void assert(Test *test, int assertion, char *message)
 		return;
 
 	char failure[1024];
-	sprintf(failure, "%s", message);
-	test->failures[test->num_failures] = failure;
+	sprintf(failure, "[Test #%d] %s\n", test->current, message);
+	strcat(test->failure_str, failure);
 	test->num_failures = test->num_failures + 1;
 }
 
@@ -16,6 +17,7 @@ int main(void)
 {
 	test_f all_tests[] = {
 			can_deserialize_httprequest,
+			can_deserialize_httprequest_simple_rest_post,
 	};
 	int num_all_tests = sizeof(all_tests) / sizeof(all_tests[0]);
 
@@ -29,14 +31,12 @@ int main(void)
 
 	if (test.num_failures == 0)
 	{
-		printf("All tests passed.\n");
-	} else
+		printf("\e[32mAll tests passed.\n");
+	}
+	else
 	{
-		printf("There were %d failures:\n", test.num_failures);
+		printf("\e[31mThere were %d failures:\n", test.num_failures);
 	}
 
-	for (int i = 0; i < test.num_failures; i++)
-	{
-		printf("%s\n", test.failures[i]);
-	}
+	printf("%s\e[0m", test.failure_str);
 }
