@@ -3,9 +3,9 @@
 
 typedef struct
 {
-  int num_failures;
-  char *failures[1024];
-  int current;
+	int num_failures;
+	char *failures[1024];
+	int current;
 } Test;
 
 typedef void (*test_f)(Test *);

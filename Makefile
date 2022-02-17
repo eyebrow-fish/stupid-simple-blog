@@ -1,16 +1,14 @@
-full-build: clean clean-test build build-test run-test
+all: clean build build-test run-test
 
 clean:
-	rm -rf out/target/
-
-clean-test:
-	rm -rf out/test/
+	rm -rf out/
 
 build:
+	mkdir out/
 	mkdir out/target/
 	cc -Wall -o out/target/stupid-simple-blog src/*.c -I src/
 
-build-test:
+build-test: build
 	mkdir out/test/
 	cc -Wall -o out/test/stupid-simple-blog src/httprequest.c test/*.c -I src/ -I test/
 
