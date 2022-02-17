@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 #include "httpresponse.h"
 
-int httpresponse_serialize(HttpResponse *src, char *dest)
+unsigned long httpresponse_serialize(HttpResponse *src, char *dest)
 {
 	// Version mapping.
 	char *version;
@@ -49,7 +50,18 @@ int httpresponse_serialize(HttpResponse *src, char *dest)
 			return -1;
 	}
 
-	sprintf(dest, "HTTP/%s %s\r\n%s\r\n\r\n%s", version, status_str, src->header_str, src->body_str);
+	char header_str[65536] = {};
+	if (src->header_str != NULL)
+	{
+		strcpy(header_str, "\r\n");
+		strcat(header_str, src->header_str);
+	}
 
-	return 0;
+	char body_str[65536] = {};
+	if (src->body_str != NULL)
+		strcpy(body_str, src->body_str);
+
+	sprintf(dest, "HTTP/%s %s%s\r\n\r\n%s", version, status_str, header_str, body_str);
+
+	return strlen(dest);
 }

@@ -21,6 +21,6 @@ typedef struct
 	char *body_str;
 } HttpResponse;
 
-int httpresponse_serialize(HttpResponse *, char *);
+unsigned long httpresponse_serialize(HttpResponse *, char *);
 
 #endif

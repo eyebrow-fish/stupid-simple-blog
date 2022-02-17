@@ -13,10 +13,10 @@ void can_serialize_httpresponse(Test *test)
 			.body_str = "Hello, World!",
 	};
 
-	char x[248];
+	char x[248] = {};
 	httpresponse_serialize(&resp, x);
 
-	char msg[248];
+	char msg[248] = {};
 	sprintf(msg, "HTTP response is not \"%s\"", exp);
-	assert(test, strcmp(x, exp) == 0, msg);
+	assert(test, strcmp(x, exp) == 0, x);
 }

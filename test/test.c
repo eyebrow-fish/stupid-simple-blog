@@ -7,7 +7,7 @@ void assert(Test *test, int assertion, char *message)
 	if (assertion)
 		return;
 
-	char failure[1024];
+	char failure[1024] = {};
 	sprintf(failure, "[Test #%d] %s\n", test->current, message);
 	strcat(test->failure_str, failure);
 	test->num_failures = test->num_failures + 1;

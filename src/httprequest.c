@@ -2,49 +2,6 @@
 #include "httprequest.h"
 #include "http.h"
 
-int httprequest_deserialize(int srcc, char *srcv, HttpRequest *dest)
-{
-	// Resolve method.
-	HttpMethod method;
-	int err = httprequest_method(srcc, srcv, &method);
-	if (err != 0)
-		return err;
-	dest->method = method;
-
-	// Resolve uri.
-	int uri_s, uri_e;
-	err = httprequest_uri_range(srcc, srcv, &uri_s, &uri_e);
-	if (err != 0)
-		return err;
-	char uri[1024];
-	strncpy(uri, srcv + uri_s, uri_e - uri_s);
-	dest->uri = uri;
-
-	// Resolve version.
-	HttpVersion version;
-	err = httprequest_version(srcc, srcv, uri_e, &version);
-	if (err != 0)
-		return err;
-	dest->version = version;
-
-	// Resolve header_str.
-	int header_s, header_e;
-	err = httprequest_header_str_range(srcc, srcv, &header_s, &header_e);
-	if (err != 0)
-		return err;
-	char header_str[65536];
-	strncpy(header_str, srcv + header_s, header_e - header_s);
-	dest->header_str = header_str;
-
-	// Resolve body_str.
-	int body_s = header_e + 4; // Prepended with \r\n\r\n.
-	char body_str[65536];
-	strncpy(body_str, srcv + body_s, srcc - body_s);
-	dest->body_str = body_str;
-
-	return 0;
-}
-
 int httprequest_method(int srcc, const char *srcv, HttpMethod *method)
 {
 	if (srcc < 14) // No header available.
@@ -185,6 +142,49 @@ int httprequest_header_str_range(int srcc, const char *srcv, int *start, int *en
 
 	(*start) = s;
 	(*end) = e;
+
+	return 0;
+}
+
+int httprequest_deserialize(int srcc, char *srcv, HttpRequest *dest)
+{
+	// Resolve method.
+	HttpMethod method;
+	int err = httprequest_method(srcc, srcv, &method);
+	if (err != 0)
+		return err;
+	dest->method = method;
+
+	// Resolve uri.
+	int uri_s, uri_e;
+	err = httprequest_uri_range(srcc, srcv, &uri_s, &uri_e);
+	if (err != 0)
+		return err;
+	char uri[1024] = {};
+	strncpy(uri, srcv + uri_s, uri_e - uri_s);
+	dest->uri = uri;
+
+	// Resolve version.
+	HttpVersion version;
+	err = httprequest_version(srcc, srcv, uri_e, &version);
+	if (err != 0)
+		return err;
+	dest->version = version;
+
+	// Resolve header_str.
+	int header_s, header_e;
+	err = httprequest_header_str_range(srcc, srcv, &header_s, &header_e);
+	if (err != 0)
+		return err;
+	char header_str[65536] = {};
+	strncpy(header_str, srcv + header_s, header_e - header_s);
+	dest->header_str = header_str;
+
+	// Resolve body_str.
+	int body_s = header_e + 4; // Prepended with \r\n\r\n.
+	char body_str[65536] = {};
+	strncpy(body_str, srcv + body_s, srcc - body_s);
+	dest->body_str = body_str;
 
 	return 0;
 }

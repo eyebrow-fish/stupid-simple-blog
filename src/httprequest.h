@@ -23,12 +23,4 @@ typedef struct
 
 int httprequest_deserialize(int, char *, HttpRequest *);
 
-int httprequest_method(int, const char *, HttpMethod *);
-
-int httprequest_uri_range(int, const char *, int *, int *);
-
-int httprequest_version(int, const char *, int, HttpVersion *);
-
-int httprequest_header_str_range(int, const char *, int *, int *);
-
 #endif
