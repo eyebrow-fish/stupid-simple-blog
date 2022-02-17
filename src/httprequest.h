@@ -29,6 +29,7 @@ typedef struct
 
 int get_method(int, char *, HttpMethod *);
 int get_uri_range(int, char *, int *, int *);
+int get_version(int, char *, int, HttpVersion *);
 int httprequest_deserialize(int, char *, HttpRequest *);
 
 #endif
