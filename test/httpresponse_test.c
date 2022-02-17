@@ -18,5 +18,5 @@ void can_serialize_httpresponse(Test *test)
 
 	char msg[248] = {};
 	sprintf(msg, "HTTP response is not \"%s\"", exp);
-	assert(test, strcmp(x, exp) == 0, x);
+	assert(test, strcmp(x, exp) == 1, x);
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "test.h"
+#include "logger.h"
 
 void assert(Test *test, int assertion, char *message)
 {
@@ -32,12 +33,11 @@ int main(void)
 
 	if (test.num_failures == 0)
 	{
-		printf("\e[32mAll tests passed.\n");
+		log_info("All tests passed.");
 	}
 	else
 	{
-		printf("\e[31mThere were %d failures:\n", test.num_failures);
+		log_error("\e[31mThere were %d failures:\n", test.num_failures);
+		log_error("\e[31m%s\e[0m", test.failure_str);
 	}
-
-	printf("%s\e[0m", test.failure_str);
 }

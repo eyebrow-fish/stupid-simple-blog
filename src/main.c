@@ -3,22 +3,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "main.h"
 #include "httprequest.h"
 #include "httpresponse.h"
+#include "logger.h"
 
 int sock_fd;
-
-void log_error(char *msg)
-{
-	printf("[ERROR] %s\n", msg); // I was typing the same thing everywhere.
-}
-
-void log_info(char *msg)
-{
-	printf("[INFO] %s\n", msg); // I was typing the same thing everywhere.
-}
 
 void handle_conn(int conn_fd)
 {
@@ -69,17 +61,18 @@ void handle_conn(int conn_fd)
 }
 
 
-void cleanup(void)
+void cleanup()
 {
-	if (sock_fd < 0)
-		return;
-
+	log_info("Closing server.");
 	close(sock_fd);
 }
 
 int main(void)
 {
 	atexit(cleanup);
+	signal(SIGINT, cleanup);
+
+	log_info("Starting server at %d.", PORT);
 
 	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock_fd < 0)
