@@ -1,18 +1,19 @@
 #include <string.h>
 #include "httprequest.h"
+#include "http.h"
 
 int httprequest_deserialize(int srcc, char *srcv, HttpRequest *dest)
 {
 	// Resolve method.
 	HttpMethod method;
-	int err = get_method(srcc, srcv, &method);
+	int err = httprequest_method(srcc, srcv, &method);
 	if (err != 0)
 		return err;
 	dest->method = method;
 
 	// Resolve uri.
 	int uri_s, uri_e;
-	err = get_uri_range(srcc, srcv, &uri_s, &uri_e);
+	err = httprequest_uri_range(srcc, srcv, &uri_s, &uri_e);
 	if (err != 0)
 		return err;
 	char uri[1024];
@@ -21,14 +22,14 @@ int httprequest_deserialize(int srcc, char *srcv, HttpRequest *dest)
 
 	// Resolve version.
 	HttpVersion version;
-	err = get_version(srcc, srcv, uri_e, &version);
+	err = httprequest_version(srcc, srcv, uri_e, &version);
 	if (err != 0)
 		return err;
 	dest->version = version;
 
 	// Resolve header_str.
 	int header_s, header_e;
-	err = get_header_str_range(srcc, srcv, &header_s, &header_e);
+	err = httprequest_header_str_range(srcc, srcv, &header_s, &header_e);
 	if (err != 0)
 		return err;
 	char header_str[65536];
@@ -44,7 +45,7 @@ int httprequest_deserialize(int srcc, char *srcv, HttpRequest *dest)
 	return 0;
 }
 
-int get_method(int srcc, const char *srcv, HttpMethod *method)
+int httprequest_method(int srcc, const char *srcv, HttpMethod *method)
 {
 	if (srcc < 14) // No header available.
 		return -1;
@@ -90,7 +91,7 @@ int get_method(int srcc, const char *srcv, HttpMethod *method)
 	return -1;
 }
 
-int get_uri_range(int srcc, const char *srcv, int *start, int *end)
+int httprequest_uri_range(int srcc, const char *srcv, int *start, int *end)
 {
 	int s = 0;
 	int e = 0;
@@ -120,7 +121,7 @@ int get_uri_range(int srcc, const char *srcv, int *start, int *end)
 	return 0;
 }
 
-int get_version(int srcc, const char *srcv, int uri_end, HttpVersion *version)
+int httprequest_version(int srcc, const char *srcv, int uri_end, HttpVersion *version)
 {
 	int vs = uri_end + 6;
 	if (srcc < vs || srcv[vs + 1] != '.')
@@ -159,7 +160,7 @@ int get_version(int srcc, const char *srcv, int uri_end, HttpVersion *version)
 	return 0;
 }
 
-int get_header_str_range(int srcc, const char *srcv, int *start, int *end)
+int httprequest_header_str_range(int srcc, const char *srcv, int *start, int *end)
 {
 	int s = 0;
 	int e = 0;

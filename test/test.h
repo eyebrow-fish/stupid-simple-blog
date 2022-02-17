@@ -14,6 +14,9 @@ extern void assert(Test *, int, char *);
 
 // Our tests.
 void can_deserialize_httprequest(Test *);
+
 void can_deserialize_httprequest_simple_rest_post(Test *);
+
+void can_serialize_httpresponse(Test *);
 
 #endif

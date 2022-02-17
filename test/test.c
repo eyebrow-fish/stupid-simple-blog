@@ -18,6 +18,7 @@ int main(void)
 	test_f all_tests[] = {
 			can_deserialize_httprequest,
 			can_deserialize_httprequest_simple_rest_post,
+			can_serialize_httpresponse,
 	};
 	int num_all_tests = sizeof(all_tests) / sizeof(all_tests[0]);
 
