@@ -3,26 +3,15 @@
 #include <string.h>
 #include "test.h"
 
-void assert_eq(Test *test, void *expected, void *actual)
+void assert(Test *test, int assertion, char *message)
 {
-  if (expected == actual)
+  if (assertion)
     return;
 
   char failure[1024];
-  sprintf(failure, "Expected [%p] did not equal actual [%p].", expected, actual);
+  sprintf(failure, "%s", message);
   test->failures[test->num_failures] = failure;
-  test->num_failures++;
-}
-
-void assert_neq(Test *test, void *expected, void *actual)
-{
-  if (expected != actual)
-    return;
-
-  char failure[1024];
-  sprintf(failure, "Expected [%p] was equal to actual [%p].", expected, actual);
-  test->failures[test->num_failures] = failure;
-  test->num_failures++;
+  test->num_failures = test->num_failures + 1;
 }
 
 int main(void)
@@ -40,7 +29,11 @@ int main(void)
     all_tests[i](&test);
   }
 
-  if (test.num_failures > 0)
+  if (test.num_failures == 0)
+  {
+    printf("All tests passed.\n");
+  }
+  else
   {
     printf("There were %d failures:\n", test.num_failures);
   }

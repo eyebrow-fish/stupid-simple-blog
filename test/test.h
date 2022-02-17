@@ -10,8 +10,7 @@ typedef struct
 
 typedef void (*test_f)(Test *);
 
-extern void assert_eq(Test *, void *, void *);
-extern void assert_neq(Test *, void *, void *);
+extern void assert(Test *, int, char *);
 
 // Our tests.
 void can_deserialize_httprequest(Test *);

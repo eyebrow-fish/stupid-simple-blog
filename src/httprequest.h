@@ -4,6 +4,7 @@
 typedef enum
 {
   HTTP_GET,
+  HTTP_PUT,
   HTTP_POST,
   HTTP_DELETE,
   HTTP_OPTIONS,
@@ -21,11 +22,13 @@ typedef struct
 {
   HttpMethod method;
   char *uri;
-  HttpVersion *version;
+  HttpVersion version;
   char *header_str;
   char *body_str;
 } HttpRequest;
 
-int httprequest_deserialize(char *src, HttpRequest *dest);
+int get_method(int, char *, HttpMethod *);
+int get_uri_range(int, char *, int *, int *);
+int httprequest_deserialize(int, char *, HttpRequest *);
 
 #endif
