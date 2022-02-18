@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include "main.h"
+#include "server.h"
 #include "httprequest.h"
 #include "httpresponse.h"
 #include "logger.h"
