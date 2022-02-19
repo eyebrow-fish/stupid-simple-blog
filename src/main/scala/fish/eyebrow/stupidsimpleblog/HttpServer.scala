@@ -15,8 +15,10 @@ object HttpServer extends App {
   private implicit lazy val system: ActorSystem = ActorSystem()
   private implicit lazy val ec: ExecutionContext = ExecutionContext.global
 
-  private val route: Route = Page.route(Index) ~
-    (get & path("health"))(complete(StatusCodes.OK))
+  private val route: Route = concat(
+    Page.all.map(_.route) :+
+      (get & path("health"))(complete(StatusCodes.OK)): _*
+  )
 
   Http().newServerAt("localhost", 8080).bind(route).logTime("Start server")
 }

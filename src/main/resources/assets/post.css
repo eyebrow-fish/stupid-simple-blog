@@ -1,5 +1,9 @@
-.blog {
+.post {
     border: solid 1px #000;
     max-width: 1440px;
     padding: 0.5em;
+}
+
+.post-header {
+    margin-bottom: 0;
 }
