@@ -14,11 +14,11 @@ package object stupidsimpleblog {
           Instant.now.toEpochMilli
         }
         t <- f
-        _ <- Future.successful {
-          val n = Instant.now.toEpochMilli
-          logger.info(s"""Finished "$msg" in ${n - s}ms.""")
-        }
-      } yield t
+      } yield {
+        val n = Instant.now.toEpochMilli
+        logger.info(s"""Finished "$msg" in ${n - s}ms.""")
+        t
+      }
     }
   }
 }
