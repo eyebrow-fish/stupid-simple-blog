@@ -7,18 +7,17 @@ import fish.eyebrow.stupidsimpleblog.assets.Asset
 import scalatags.Text.all._
 import scalatags.Text.{TypedTag, all}
 
-trait Page {
-  def path: String
+abstract class Page(val path: String, title: String) {
+  def assets: Seq[Asset]
 
   def content: TypedTag[String]
-
-  def assets: Seq[Asset]
 
   def render: String = {
     doctype("html")(
       html(
         all.head(
-          tag("style")(assets.map(_.content)),
+          tag("title")(s"stupid simple blog - $title"),
+          assets.map(_.content),
         ),
         body(
           header(
