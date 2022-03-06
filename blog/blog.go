@@ -1,17 +1,19 @@
 package blog
 
-import "html/template"
+import (
+	_ "embed"
+	"html/template"
+)
+
+//go:embed page.html
+var pageTemplate string
+
+var Template = template.Must(template.New("blog").Parse(pageTemplate))
 
 type Blog struct {
 	Title string
 }
 
-type Page struct{}
-
-func (p Page) Template() (*template.Template, error) {
-	return template.ParseFiles("blog/page.html")
-}
-
-func (p Page) Render(m map[string]string) any {
+func Render(m map[string]string) Blog {
 	return Blog{"Foo"}
 }

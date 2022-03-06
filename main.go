@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/eyebrow-fish/stupid-simple-blog/blog"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -9,7 +8,9 @@ import (
 func main() {
 	r := mux.NewRouter()
 
-	r.PathPrefix("/blog").Handler(pageHandler(blog.Page{}))
+	for k, v := range handlers {
+		r.PathPrefix(k).Handler(v)
+	}
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		panic(err)

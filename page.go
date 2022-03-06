@@ -1,30 +1,29 @@
 package main
 
 import (
-	"fmt"
+	"github.com/eyebrow-fish/stupid-simple-blog/blog"
 	"github.com/gorilla/mux"
 	"html/template"
 	"log"
 	"net/http"
 )
 
-type Page interface {
-	Template() (*template.Template, error)
-	Render(map[string]string) any
+var handlers = map[string]*mux.Router{
+	"/blog": pageHandler(page[blog.Blog]{blog.Template, blog.Render}),
 }
 
-func pageHandler(p Page) *mux.Router {
+type page[T any] struct {
+	Template *template.Template
+	Renderer render[T]
+}
+
+type render[T any] func(map[string]string) T
+
+func pageHandler[T any](p page[T]) *mux.Router {
 	r := mux.NewRouter()
 
 	r.Methods(http.MethodGet).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		t, err := p.Template()
-		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		_, err = fmt.Fprint(w, t.Execute(w, p.Render(mux.Vars(r))))
+		err := p.Template.Execute(w, p.Renderer(mux.Vars(r)))
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
