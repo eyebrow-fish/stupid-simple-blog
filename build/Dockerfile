@@ -1,3 +1,3 @@
 FROM postgres:latest
 
-ADD migrate/create-posts.sql /docker-entrypoint-initdb.d/
+ADD migrate/*.sql /docker-entrypoint-initdb.d/

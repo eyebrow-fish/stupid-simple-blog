@@ -9,7 +9,7 @@ func main() {
 	r := mux.NewRouter()
 
 	for k, v := range handlers {
-		r.PathPrefix(k).Handler(v)
+		r.HandleFunc(k, v)
 	}
 
 	if err := http.ListenAndServe(":8080", r); err != nil {

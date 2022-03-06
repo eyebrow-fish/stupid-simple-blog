@@ -20,12 +20,27 @@
         header a:hover {
             text-decoration: underline;
         }
+
+        .content {
+            border: solid 1px black;
+        }
     </style>
 </head>
 <body>
     <header>
-        <a href="/">stupid simple blog</a>
+        <h2><a href="/">stupid simple blog</a></h2>
     </header>
-    {{ .Title }}
+    <div class="content">
+        <h3>{{.Title}}</h3>
+        <p>{{.Text}}</p>
+    </div>
+    <div class="content">
+        <h4>Comments</h4>
+        {{range .Comments}}
+        <div>
+            <p>{{.Text}}</p>
+        </div>
+        {{end}}
+    </div>
 </body>
 </html>
