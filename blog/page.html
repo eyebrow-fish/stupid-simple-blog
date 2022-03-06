@@ -3,8 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        header {
+            background-color: #20488d;
+            color: white;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+        header a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <a href="/">stupid simple blog</a>
+    </header>
     {{ .Title }}
 </body>
 </html>
