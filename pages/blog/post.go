@@ -5,27 +5,26 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/eyebrow-fish/stupid-simple-blog/db"
-	_ "github.com/eyebrow-fish/stupid-simple-blog/db"
 	"html/template"
 	"strconv"
 )
 
-//go:embed page.html
-var pageTemplate string
+//go:embed post.html
+var postTemplateStr string
 
-var Template = template.Must(template.New("blog").Parse(pageTemplate))
+var postTemplate = template.Must(template.New("post").Parse(postTemplateStr))
 
-type Comment struct {
+type comment struct {
 	Text string
 }
 
-type Post struct {
+type post struct {
 	Title    string
 	Text     string
-	Comments []Comment
+	Comments []comment
 }
 
-func Handler(v map[string]string) (*Post, error) {
+func getPostHandler(v map[string]string) (*post, error) {
 	id := v["id"]
 	if _, err := strconv.Atoi(id); err != nil {
 		return nil, fmt.Errorf("id cannot be \"%s\"", id)
@@ -45,14 +44,14 @@ func Handler(v map[string]string) (*Post, error) {
 	return buildPost(r)
 }
 
-func buildPost(r *sql.Rows) (*Post, error) {
+func buildPost(r *sql.Rows) (*post, error) {
 	if !r.Next() {
 		return nil, nil
 	}
 
-	var b Post
+	var b post
 	for r.Next() {
-		var c Comment
+		var c comment
 		err := r.Scan(&b.Title, &b.Text, &c.Text)
 		if err != nil {
 			return nil, err

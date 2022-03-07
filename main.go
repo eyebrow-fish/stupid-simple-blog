@@ -1,9 +1,15 @@
 package main
 
 import (
+	"github.com/eyebrow-fish/stupid-simple-blog/pages"
+	"github.com/eyebrow-fish/stupid-simple-blog/pages/blog"
 	"github.com/gorilla/mux"
 	"net/http"
 )
+
+var handlers = map[string]http.HandlerFunc{
+	"/{id}": pages.PageHandler(blog.One),
+}
 
 func main() {
 	r := mux.NewRouter()
