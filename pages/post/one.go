@@ -14,7 +14,7 @@ func oneHandler(v map[string]string) (*post, error) {
 	}
 
 	r, err := db.DB.Query(`
-		select p.id, p.title, p.text, c.text from posts p
+		select * from posts p
 		left join comments c
 			on p.id = c.post_id
 		where p.id = ` + id + `order by p.id desc`,

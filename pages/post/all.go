@@ -7,7 +7,7 @@ import (
 
 func allHandler(_ map[string]string) (*[]post, error) {
 	r, err := db.DB.Query(`
-		select p.id, p.title, p.text, c.text from posts p
+		select * from posts p
 		left join comments c
 			on p.id = c.post_id
 		order by p.id desc

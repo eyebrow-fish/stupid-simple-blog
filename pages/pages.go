@@ -31,7 +31,7 @@ func PageHandler[T any](p Page[T]) http.HandlerFunc {
 			return
 		}
 
-		err = p.template.Execute(w, o)
+		err = p.template.Execute(w, newPageData(o))
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)

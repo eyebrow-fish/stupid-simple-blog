@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>stupid simple blog - {{ .Data.Title }}</title>
+    <style>{{.MainStyle}}</style>
+</head>
+<body>
+    {{.Header}}
+    <div class="content">
+        <h3>{{.Data.Title}}</h3>
+        <p>{{.Data.Text}}</p>
+    </div>
+    <div class="content">
+        <h4>Comments</h4>
+        {{range .Data.Comments}}
+        <div>
+            <p>{{.Text}}</p>
+        </div>
+        {{end}}
+    </div>
+</body>
+</html>

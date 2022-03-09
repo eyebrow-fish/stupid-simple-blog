@@ -12,17 +12,19 @@ import (
 var One = pages.NewPage(onePostTemplate, oneHandler)
 var All = pages.NewPage(allPostTemplate, allHandler)
 
-//go:embed post.html
+//go:embed assets/one.html
 var onePostStr string
 
-//go:embed all.html
+//go:embed assets/all.html
 var allPostStr string
 
 var onePostTemplate = template.Must(template.New("post/one").Parse(onePostStr))
 var allPostTemplate = template.Must(template.New("post/all").Parse(allPostStr))
 
 type comment struct {
-	Text *string
+	Id     uint64
+	PostId uint64
+	Text   string
 }
 
 type post struct {
@@ -48,24 +50,32 @@ func buildPost(r *sql.Rows) (*post, error) {
 	return &ps[0], nil
 }
 
+// buildPosts maps sql.Rows of the post struct using their full projection, including a join to comment(s).
 func buildPosts(r *sql.Rows) ([]post, error) {
 	pm := make(map[uint64]post)
 	for r.Next() {
 		var p post
-		var c comment
-		err := r.Scan(&p.Id, &p.Title, &p.Text, &c.Text)
+		// Necessary to map it manually and to construct it later because we have to assume these could be nil with a
+		// left join.
+		var (
+			cId  *uint64
+			cPId *uint64
+			cT   *string
+		)
+		err := r.Scan(&p.Id, &p.Title, &p.Text, &cId, &cPId, &cT)
 		if err != nil {
 			return nil, err
 		}
 
-		if c.Text != nil {
-			p.Comments = append(pm[p.Id].Comments, c)
+		if cId != nil {
+			p.Comments = append(pm[p.Id].Comments, comment{*cId, *cPId, *cT})
 			p.CommentCount = len(p.Comments)
 		}
 
 		pm[p.Id] = p
 	}
 
+	// No posts. We can just 404.
 	if len(pm) == 0 {
 		return nil, nil
 	}

@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+}
+
+header {
+    background-color: #20488d;
+    color: white;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+}
+header a:hover {
+    text-decoration: underline;
+}
+
+.content {
+    border: solid 1px black;
+}
