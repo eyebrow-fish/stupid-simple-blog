@@ -14,9 +14,13 @@ func oneHandler(v map[string]string) (*post, error) {
 	}
 
 	r, err := db.DB.Query(`
-		select * from posts p
+		select p.id, p.title, p.text, pu.id, pu.email, c.id, c.post_id, c.text, cu.id, cu.email from posts p
+		join users pu
+		    on p.user_id = pu.id
 		left join comments c
 			on p.id = c.post_id
+		left join users cu
+			on c.user_id = cu.id
 		where p.id = ` + id + `order by p.id desc`,
 	)
 	if err != nil {

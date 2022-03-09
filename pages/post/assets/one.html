@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>stupid simple blog - {{ .Data.Title }}</title>
-    <style>{{.MainStyle}}</style>
+    {{.MainStyle}}
 </head>
 <body>
     {{.Header}}
     <div class="content">
-        <h3>{{.Data.Title}}</h3>
+        <p>
+            <span class="content-title">{{.Data.Title}}</span>
+            <span> by {{.Data.User.Email}}</span>
+        </p>
         <p>{{.Data.Text}}</p>
-    </div>
-    <div class="content">
-        <h4>Comments</h4>
-        {{range .Data.Comments}}
+        <div class="divider"></div>
         <div>
-            <p>{{.Text}}</p>
+            {{if .Data.CommentCount}}
+            <p class="content-title">Comments</p>
+            {{range .Data.Comments}}
+            <div>
+                <p>{{.Text}}</p>
+                <p>by {{.User.Email}}</p>
+            </div>
+            {{end}}
+            {{else}}
+            <p>No comments</p>
+            {{end}}
         </div>
-        {{end}}
     </div>
 </body>
 </html>

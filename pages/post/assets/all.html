@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>stupid simple blog</title>
-    <style>{{.MainStyle}}</style>
+    {{.MainStyle}}
 </head>
 <body>
     {{.Header}}
     {{range .Data}}
         <div class="content">
-            <h3><a href="/{{.Id}}">{{.Title}}</a></h3>
+            <p>
+                <span class="content-title">
+                    <a href="/{{.Id}}">{{.Title}}</a>
+                </span>
+                <span> by {{.User.Email}}</span>
+            </p>
             <p>{{.Text}}</p>
-        </div>
-        <div class="content">
-            <p>{{.CommentCount}} comments</p>
+            <div class="divider"></div>
+            <div>
+                <p>{{.CommentCount}} comment(s)</p>
+            </div>
         </div>
     {{end}}
 </body>
