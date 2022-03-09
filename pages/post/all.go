@@ -10,6 +10,7 @@ func allHandler(_ map[string]string) (*[]post, error) {
 		select p.id, p.title, p.text, c.text from posts p
 		left join comments c
 			on p.id = c.post_id
+		order by p.id desc
 	`)
 	if err != nil {
 		return nil, err

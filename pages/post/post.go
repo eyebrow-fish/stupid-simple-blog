@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages"
 	"html/template"
+	"sort"
 )
 
 var One = pages.NewPage(onePostTemplate, oneHandler)
@@ -48,10 +49,6 @@ func buildPost(r *sql.Rows) (*post, error) {
 }
 
 func buildPosts(r *sql.Rows) ([]post, error) {
-	if !r.Next() {
-		return nil, nil
-	}
-
 	pm := make(map[uint64]post)
 	for r.Next() {
 		var p post
@@ -62,12 +59,15 @@ func buildPosts(r *sql.Rows) ([]post, error) {
 		}
 
 		if c.Text != nil {
-			p.Comments = append(p.Comments, c)
+			p.Comments = append(pm[p.Id].Comments, c)
 			p.CommentCount = len(p.Comments)
 		}
-		if _, ok := pm[p.Id]; !ok {
-			pm[p.Id] = p
-		}
+
+		pm[p.Id] = p
+	}
+
+	if len(pm) == 0 {
+		return nil, nil
 	}
 
 	var ps []post
@@ -75,5 +75,6 @@ func buildPosts(r *sql.Rows) ([]post, error) {
 		ps = append(ps, v)
 	}
 
+	sort.SliceStable(ps, func(i, j int) bool { return ps[i].Id > ps[j].Id })
 	return ps, nil
 }

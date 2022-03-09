@@ -17,7 +17,7 @@ func oneHandler(v map[string]string) (*post, error) {
 		select p.id, p.title, p.text, c.text from posts p
 		left join comments c
 			on p.id = c.post_id
-		where p.id = ` + id + `;`,
+		where p.id = ` + id + `order by p.id desc`,
 	)
 	if err != nil {
 		return nil, err
