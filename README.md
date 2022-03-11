@@ -1,6 +1,6 @@
 # stupid-simple-blog
 
-Simple server-side rendering with Go HTML template, and backed by a PSQL.
+Simple server-side rendering with Go HTML templates and backed by PSQL.
 It doesn't get much more simple.
 
 # dev
