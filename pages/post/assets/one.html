@@ -13,18 +13,28 @@
             <span> by {{.Data.User.Email}}</span>
         </p>
         <p>{{.Data.Text}}</p>
+
         <div class="divider"></div>
+
+        <p>{{.Data.CommentCount}} comment(s)</p>
+
+        <form action="/{{.Data.Id}}/reply" method="post">
+            <label>
+                <textarea class="comment-area" name="text" placeholder="Comment text"></textarea>
+            </label>
+            <input type="submit" value="Submit"/>
+        </form>
+
         <div>
             {{if .Data.CommentCount}}
-            <p class="content-title">Comments</p>
-            {{range .Data.Comments}}
-            <div>
-                <p>{{.Text}}</p>
-                <p>by {{.User.Email}}</p>
-            </div>
-            {{end}}
-            {{else}}
-            <p>No comments</p>
+                <div class="divider"></div>
+                <p class="content-title">Comments</p>
+                {{range .Data.Comments}}
+                    <div class="comment">
+                        <p class="poster">{{.User.Email}} said</p>
+                        <pre>{{.Text}}</pre>
+                    </div>
+                {{end}}
             {{end}}
         </div>
     </div>

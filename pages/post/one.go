@@ -21,8 +21,8 @@ func oneHandler(v map[string]string) (*post, error) {
 			on p.id = c.post_id
 		left join users cu
 			on c.user_id = cu.id
-		where p.id = ` + id + `order by p.id desc`,
-	)
+		where p.id = $1 order by p.id desc;
+	`, id)
 	if err != nil {
 		return nil, err
 	}

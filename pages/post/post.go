@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages"
+	"github.com/eyebrow-fish/stupid-simple-blog/pages/comment"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages/user"
 	"html/template"
 	"sort"
@@ -22,20 +23,13 @@ var allPostStr string
 var onePostTemplate = template.Must(template.New("post/one").Parse(onePostStr))
 var allPostTemplate = template.Must(template.New("post/all").Parse(allPostStr))
 
-type comment struct {
-	Id     uint64
-	PostId uint64
-	User   user.User
-	Text   string
-}
-
 type post struct {
 	Id           uint64
 	Title        string
 	Text         string
 	User         user.User
 	CommentCount int
-	Comments     []comment
+	Comments     []comment.Comment
 }
 
 func buildPost(r *sql.Rows) (*post, error) {
@@ -76,7 +70,12 @@ func buildPosts(r *sql.Rows) ([]post, error) {
 		if cId != nil {
 			p.Comments = append(
 				pm[p.Id].Comments,
-				comment{*cId, *cPId, user.User{Id: *cUId, Email: *cUE}, *cT},
+				comment.Comment{
+					Id:     *cId,
+					PostId: *cPId,
+					User:   user.User{Id: *cUId, Email: *cUE},
+					Text:   *cT,
+				},
 			)
 			p.CommentCount = len(p.Comments)
 		}
