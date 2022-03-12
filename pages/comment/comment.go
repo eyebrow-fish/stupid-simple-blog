@@ -2,6 +2,7 @@ package comment
 
 import (
 	"database/sql"
+	"errors"
 	"github.com/eyebrow-fish/stupid-simple-blog/db"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages/user"
@@ -22,6 +23,10 @@ type commentForm struct {
 
 func ReplyHandler(w http.ResponseWriter, r *http.Request) {
 	pages.FormHandler[commentForm](w, r, commentForm{}, func(c commentForm) error {
+		if c.Text == "" {
+			return errors.New("comment cannot be empty")
+		}
+
 		id := mux.Vars(r)["id"]
 		r, err := db.DB.Query(`
 			insert into comments(user_id, post_id, text) 
@@ -31,6 +36,7 @@ func ReplyHandler(w http.ResponseWriter, r *http.Request) {
 			return err
 		}
 		defer func(r *sql.Rows) { _ = r.Close() }(r)
+
 		return nil
 	})
 }

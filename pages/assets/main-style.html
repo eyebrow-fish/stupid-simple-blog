@@ -13,14 +13,34 @@
         padding: 1em;
     }
 
-    header .header-title {
-        font-size: 24px;
+    header .sep::before {
+        content: '>>';
+        font-size: 20px;
+        margin: 0 0.5em;
+    }
+
+    header a {
         color: white;
         text-decoration: none;
     }
 
-    header .header-title:hover {
+    header .header-title {
+        font-size: 24px;
+    }
+
+    header .header-nav {
+        font-size: 20px;
+    }
+
+    header .header-nav:hover {
         text-decoration: underline;
+    }
+
+    pre {
+        font-size: 16px;
+        font-family: inherit;
+        margin: 0.5em;
+        white-space: pre-wrap;
     }
 
     .content {
@@ -51,12 +71,6 @@
     .comment .poster {
         font-size: 14px;
         margin: 0;
-    }
-
-    .comment pre {
-        font-size: 16px;
-        font-family: inherit;
-        margin: 0.5em;
     }
 
     button, input[type="submit"] {
