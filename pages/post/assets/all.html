@@ -7,20 +7,22 @@
 </head>
 <body>
     {{.Header}}
-    {{range .Data}}
-        <div class="content">
-            <p>
-                <span class="content-title">
-                    <a href="/{{.Id}}">{{.Title}}</a>
-                </span>
-                <span> by {{.User.Email}}</span>
-            </p>
-            <pre>{{.Text}}</pre>
-            <div class="divider"></div>
-            <div>
-                <p>{{.CommentCount}} comment(s)</p>
+    <div class="content">
+        {{range .Data}}
+            <div class="post">
+                <p>
+                    <span class="content-title">
+                        <a href="/{{.Id}}">{{.Title}}</a>
+                    </span>
+                    <span> by {{.User.Email}}</span>
+                </p>
+                <pre>{{.Text}}</pre>
+                <div class="divider"></div>
+                <div>
+                    <p>{{.CommentCount}} comment(s)</p>
+                </div>
             </div>
-        </div>
-    {{end}}
+        {{end}}
+    </div>
 </body>
 </html>
