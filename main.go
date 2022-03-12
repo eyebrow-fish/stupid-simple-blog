@@ -17,7 +17,7 @@ func main() {
 	r.Methods(http.MethodGet).Path("/").Handler(pages.PageHandler(post.All))
 	r.Methods(http.MethodGet).Path("/{id}").Handler(pages.PageHandler(post.One))
 
-	r.Methods(http.MethodPost).Path("/{id}/reply").HandlerFunc(comment.ReplyHandler)
+	r.Methods(http.MethodPost).Path("/{id}/reply").HandlerFunc(comment.Reply)
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		panic(err)

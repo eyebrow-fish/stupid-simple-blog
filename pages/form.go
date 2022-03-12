@@ -8,25 +8,31 @@ import (
 
 var decoder = schema.NewDecoder()
 
-func FormHandler[T any](w http.ResponseWriter, r *http.Request, t T, f func(t T) error) {
-	if err := r.ParseForm(); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, _ = fmt.Fprintf(w, err.Error())
-		return
-	}
+type Form interface {
+	Handle(r *http.Request) error
+}
 
-	err := decoder.Decode(&t, r.PostForm)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, _ = fmt.Fprintf(w, err.Error())
-		return
-	}
+func FormHandler(f Form) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = fmt.Fprintf(w, err.Error())
+			return
+		}
 
-	if err := f(t); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, _ = fmt.Fprintf(w, err.Error())
-		return
-	}
+		err := decoder.Decode(&f, r.PostForm)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = fmt.Fprintf(w, err.Error())
+			return
+		}
 
-	http.Redirect(w, r, r.Header.Get("referer"), http.StatusFound)
+		if err := f.Handle(r); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = fmt.Fprintf(w, err.Error())
+			return
+		}
+
+		http.Redirect(w, r, r.Header.Get("referer"), http.StatusFound)
+	}
 }
