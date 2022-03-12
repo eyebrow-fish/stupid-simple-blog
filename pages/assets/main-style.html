@@ -30,6 +30,7 @@
 
     header .header-nav {
         font-size: 20px;
+        margin-right: 0.5em;
     }
 
     header .header-nav:hover {
@@ -41,6 +42,27 @@
         font-family: inherit;
         margin: 0.5em;
         white-space: pre-wrap;
+    }
+
+    textarea {
+        width: calc(100% - 0.5em);
+        resize: vertical;
+    }
+
+    input[type="text"] {
+        margin-bottom: 0.5em;
+    }
+
+    button, input[type="submit"] {
+        background-color: #20488d;
+        color: white;
+        padding: 0.5em;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover, input[type="submit"]:hover {
+        background-color: #385993;
     }
 
     .content {
@@ -59,11 +81,6 @@
         margin: 1em 0;
     }
 
-    .comment-area {
-        width: calc(100% - 0.5em);
-        resize: vertical;
-    }
-
     .comment {
         padding-bottom: 1em;
     }
@@ -71,17 +88,5 @@
     .comment .poster {
         font-size: 14px;
         margin: 0;
-    }
-
-    button, input[type="submit"] {
-        background-color: #20488d;
-        color: white;
-        padding: 0.5em;
-        border: none;
-        cursor: pointer;
-    }
-
-    button:hover, input[type="submit"]:hover {
-        background-color: #385993;
     }
 </style>

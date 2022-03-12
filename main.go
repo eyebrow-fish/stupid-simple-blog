@@ -11,8 +11,12 @@ import (
 func main() {
 	r := mux.NewRouter()
 
+	r.Methods(http.MethodGet).Path("/create").Handler(pages.PageHandler(post.CreateForm))
+	r.Methods(http.MethodPost).Path("/create").HandlerFunc(post.Create)
+
 	r.Methods(http.MethodGet).Path("/").Handler(pages.PageHandler(post.All))
 	r.Methods(http.MethodGet).Path("/{id}").Handler(pages.PageHandler(post.One))
+
 	r.Methods(http.MethodPost).Path("/{id}/reply").HandlerFunc(comment.ReplyHandler)
 
 	if err := http.ListenAndServe(":8080", r); err != nil {

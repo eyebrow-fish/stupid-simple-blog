@@ -17,6 +17,10 @@ type Page[T any] struct {
 
 func NewPage[T any](t *template.Template, h handler[T]) Page[T] { return Page[T]{t, h} }
 
+func NewEmptyPage(t *template.Template) Page[struct{}] {
+	return NewPage(t, func(_ map[string]string) (*struct{}, error) { return &struct{}{}, nil })
+}
+
 func PageHandler[T any](p Page[T]) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		o, err := p.handlerFunc(mux.Vars(r))

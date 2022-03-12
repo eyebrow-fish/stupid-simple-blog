@@ -2,26 +2,16 @@ package post
 
 import (
 	"database/sql"
-	_ "embed"
 	"fmt"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages/comment"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages/user"
-	"html/template"
 	"sort"
 )
 
-var One = pages.NewPage(onePostTemplate, oneHandler)
-var All = pages.NewPage(allPostTemplate, allHandler)
-
-//go:embed assets/one.html
-var onePostStr string
-
-//go:embed assets/all.html
-var allPostStr string
-
-var onePostTemplate = template.Must(template.New("post/one").Parse(onePostStr))
-var allPostTemplate = template.Must(template.New("post/all").Parse(allPostStr))
+var One = pages.NewPage(oneTemplate, oneHandler)
+var All = pages.NewPage(allTemplate, allHandler)
+var CreateForm = pages.NewEmptyPage(createFormTemplate)
 
 type post struct {
 	Id           uint64

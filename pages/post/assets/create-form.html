@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>stupid simple blog - create</title>
+    {{.MainStyle}}
+</head>
+<body>
+    {{.Header}}
+    <div class="content">
+        <p>
+            <span class="content-title">Create post</span>
+        </p>
+
+        <form action="/create" method="post">
+            <label>
+                <input name="title" type="text" placeholder="Title" />
+            </label>
+            <label>
+                <textarea name="text" placeholder="Post text"></textarea>
+            </label>
+
+            <div class="divider"></div>
+
+            <input type="submit" value="Create" />
+        </form>
+    </div>
+</body>
+</html>
