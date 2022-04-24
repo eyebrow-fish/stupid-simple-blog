@@ -22,7 +22,7 @@ func init() {
 }
 
 func env(k string, f string) string {
-	x := os.Getenv("POSTGRES_HOST")
+	x := os.Getenv(k)
 	if x == "" {
 		return f
 	} else {

@@ -4,16 +4,19 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/eyebrow-fish/stupid-simple-blog/db"
+	"github.com/eyebrow-fish/stupid-simple-blog/pages"
+	"github.com/gorilla/mux"
+	"net/http"
 	"strconv"
 )
 
-func oneHandler(v map[string]string) (*post, error) {
-	id := v["id"]
+func oneHandler(r *http.Request) (*pages.Page[post], error) {
+	id := mux.Vars(r)["id"]
 	if _, err := strconv.Atoi(id); err != nil {
 		return nil, fmt.Errorf("id cannot be \"%s\"", id)
 	}
 
-	r, err := db.DB.Query(`
+	rows, err := db.DB.Query(`
 		select p.id, p.title, p.text, pu.id, pu.email, c.id, c.post_id, c.text, cu.id, cu.email from posts p
 		join users pu
 		    on p.user_id = pu.id
@@ -26,7 +29,7 @@ func oneHandler(v map[string]string) (*post, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer func(r *sql.Rows) { _ = r.Close() }(r)
+	defer func(r *sql.Rows) { _ = r.Close() }(rows)
 
-	return buildPost(r)
+	return pages.WrapWithPageAndError[post](buildPost(rows))
 }

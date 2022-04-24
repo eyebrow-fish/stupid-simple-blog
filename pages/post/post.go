@@ -3,15 +3,22 @@ package post
 import (
 	"database/sql"
 	"fmt"
+	"github.com/eyebrow-fish/gosp"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages/comment"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages/user"
+	"net/http"
 	"sort"
 )
 
-var One = pages.NewPage(oneTemplate, oneHandler)
-var All = pages.NewPage(allTemplate, allHandler)
-var CreateForm = pages.NewEmptyPage(createFormTemplate)
+var One = gosp.NewPageHandler(oneHandler, oneTemplate)
+var All = gosp.NewPageHandler(allHandler, allTemplate)
+var CreateForm = gosp.NewPageHandler(
+	func(request *http.Request) (*pages.Page[struct{}], error) {
+		return pages.WrapWithPage(&struct{}{}), nil
+	},
+	createFormTemplate,
+)
 
 type post struct {
 	Id           uint64

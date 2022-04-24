@@ -2,14 +2,10 @@ package comment
 
 import (
 	"errors"
+	"github.com/eyebrow-fish/gosp"
 	"github.com/eyebrow-fish/stupid-simple-blog/db"
-	"github.com/eyebrow-fish/stupid-simple-blog/form"
 	"github.com/eyebrow-fish/stupid-simple-blog/pages/user"
-	"github.com/gorilla/mux"
-	"net/http"
 )
-
-var Reply = form.NewFormHandler(&commentForm{})
 
 type Comment struct {
 	Id     uint64
@@ -19,25 +15,23 @@ type Comment struct {
 }
 
 type commentForm struct {
+	Id   uint64
 	Text string
 }
 
-func (c commentForm) Handle(r *http.Request) error {
-	id := mux.Vars(r)["id"]
-	_, err := db.DB.Exec(`
-			insert into comments(user_id, post_id, text) 
+var Reply = gosp.NewFormHandler[commentForm](
+	func(c *commentForm) error {
+		if c.Text == "" {
+			return errors.New("comment cannot be empty")
+		}
+
+		_, err := db.DB.Exec(`
+			insert into comments(user_id, post_id, text)
 			values(1, $1, $2)
-		`, id, c.Text)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (c commentForm) Validate(w http.ResponseWriter, r *http.Request) error {
-	if c.Text == "" {
-		return errors.New("comment cannot be empty")
-	}
-	return nil
-}
+		`, c.Id, c.Text)
+		if err != nil {
+			return err
+		}
+		return nil
+	},
+)
