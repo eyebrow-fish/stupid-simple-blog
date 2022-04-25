@@ -1,6 +1,6 @@
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
-github.com/eyebrow-fish/gosp v1.1.1 h1:hpf6qL57w8vnj8lHIAOFDwgPUXa63euXW0eDdaI7qiM=
-github.com/eyebrow-fish/gosp v1.1.1/go.mod h1:0u9Z4DG9/y7AlFdNFzBNbd/juaYvciDQ3QUQ6E+5raQ=
+github.com/eyebrow-fish/gosp v1.2.0 h1:V6IQ7vqijbMrqQAHvavlhwd88XtDR6IxRzUzCZcpH2E=
+github.com/eyebrow-fish/gosp v1.2.0/go.mod h1:0u9Z4DG9/y7AlFdNFzBNbd/juaYvciDQ3QUQ6E+5raQ=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/gorilla/schema v1.2.0 h1:YufUaxZYCKGFuAq3c96BOhjgd5nmXiOY9NGzF247Tsc=

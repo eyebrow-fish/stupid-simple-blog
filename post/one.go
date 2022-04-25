@@ -4,13 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/eyebrow-fish/stupid-simple-blog/db"
-	"github.com/eyebrow-fish/stupid-simple-blog/pages"
+	"github.com/eyebrow-fish/stupid-simple-blog/page"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
 
-func oneHandler(r *http.Request) (*pages.Page[post], error) {
+func oneHandler(r *http.Request) (*page.Page[post], error) {
 	id := mux.Vars(r)["id"]
 	if _, err := strconv.Atoi(id); err != nil {
 		return nil, fmt.Errorf("id cannot be \"%s\"", id)
@@ -31,5 +31,5 @@ func oneHandler(r *http.Request) (*pages.Page[post], error) {
 	}
 	defer func(r *sql.Rows) { _ = r.Close() }(rows)
 
-	return pages.WrapWithPageAndError[post](buildPost(rows))
+	return page.WrapWithPageAndError[post](buildPost(rows))
 }

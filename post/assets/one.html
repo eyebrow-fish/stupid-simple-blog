@@ -18,8 +18,7 @@
 
         <p>{{.Data.CommentCount}} comment(s)</p>
 
-        <form action="/reply" method="post">
-            <input name="id" style="display:none" value="{{.Data.Id}}">
+        <form action="/{{.Data.Id}}/reply" method="post">
             <label>
                 <textarea name="text" placeholder="Comment text"></textarea>
             </label>

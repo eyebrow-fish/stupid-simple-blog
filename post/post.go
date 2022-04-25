@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/eyebrow-fish/gosp"
-	"github.com/eyebrow-fish/stupid-simple-blog/pages"
-	"github.com/eyebrow-fish/stupid-simple-blog/pages/comment"
-	"github.com/eyebrow-fish/stupid-simple-blog/pages/user"
+	"github.com/eyebrow-fish/stupid-simple-blog/comment"
+	"github.com/eyebrow-fish/stupid-simple-blog/page"
+	"github.com/eyebrow-fish/stupid-simple-blog/user"
 	"net/http"
 	"sort"
 )
@@ -14,8 +14,8 @@ import (
 var One = gosp.NewPageHandler(oneHandler, oneTemplate)
 var All = gosp.NewPageHandler(allHandler, allTemplate)
 var CreateForm = gosp.NewPageHandler(
-	func(request *http.Request) (*pages.Page[struct{}], error) {
-		return pages.WrapWithPage(&struct{}{}), nil
+	func(request *http.Request) (*page.Page[struct{}], error) {
+		return page.WrapWithPage(&struct{}{}), nil
 	},
 	createFormTemplate,
 )

@@ -8,7 +8,7 @@ import (
 )
 
 var Create = gosp.NewFormHandler(
-	func(p *postForm) error {
+	func(_ *http.Request, p *postForm) error {
 		if p.Title == "" {
 			return errors.New("title cannot be empty")
 		}
@@ -20,11 +20,7 @@ var Create = gosp.NewFormHandler(
 			insert into posts(title, text, user_id)
 			values($1, $2, 1)
 		`, p.Title, p.Text)
-		if err != nil {
-			return err
-		}
-
-		return nil
+		return err
 	},
 	func(f *gosp.FormHandler[postForm]) {
 		f.RedirectHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

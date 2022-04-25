@@ -3,11 +3,11 @@ package post
 import (
 	"database/sql"
 	"github.com/eyebrow-fish/stupid-simple-blog/db"
-	"github.com/eyebrow-fish/stupid-simple-blog/pages"
+	"github.com/eyebrow-fish/stupid-simple-blog/page"
 	"net/http"
 )
 
-func allHandler(_ *http.Request) (*pages.Page[[]post], error) {
+func allHandler(_ *http.Request) (*page.Page[[]post], error) {
 	r, err := db.DB.Query(`
 		select p.id, p.title, p.text, pu.id, pu.email, c.id, c.post_id, c.text, cu.id, cu.email from posts p
 		join users pu
@@ -24,5 +24,5 @@ func allHandler(_ *http.Request) (*pages.Page[[]post], error) {
 	defer func(r *sql.Rows) { _ = r.Close() }(r)
 
 	ps, err := buildPosts(r)
-	return pages.WrapWithPageAndError[[]post](&ps, err)
+	return page.WrapWithPageAndError[[]post](&ps, err)
 }

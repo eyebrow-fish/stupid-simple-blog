@@ -4,7 +4,9 @@ import (
 	"errors"
 	"github.com/eyebrow-fish/gosp"
 	"github.com/eyebrow-fish/stupid-simple-blog/db"
-	"github.com/eyebrow-fish/stupid-simple-blog/pages/user"
+	"github.com/eyebrow-fish/stupid-simple-blog/user"
+	"github.com/gorilla/mux"
+	"net/http"
 )
 
 type Comment struct {
@@ -15,12 +17,11 @@ type Comment struct {
 }
 
 type commentForm struct {
-	Id   uint64
 	Text string
 }
 
 var Reply = gosp.NewFormHandler[commentForm](
-	func(c *commentForm) error {
+	func(r *http.Request, c *commentForm) error {
 		if c.Text == "" {
 			return errors.New("comment cannot be empty")
 		}
@@ -28,10 +29,7 @@ var Reply = gosp.NewFormHandler[commentForm](
 		_, err := db.DB.Exec(`
 			insert into comments(user_id, post_id, text)
 			values(1, $1, $2)
-		`, c.Id, c.Text)
-		if err != nil {
-			return err
-		}
-		return nil
+		`, mux.Vars(r)["id"], c.Text)
+		return err
 	},
 )
