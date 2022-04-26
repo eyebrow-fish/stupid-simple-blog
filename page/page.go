@@ -5,11 +5,12 @@ import (
 	"html/template"
 )
 
-//go:embed assets/main-style.html
-var mainStyle string
-
-//go:embed assets/header.html
-var header string
+var (
+	//go:embed assets/main-style.html
+	mainStyle string
+	//go:embed assets/header.html
+	header string
+)
 
 type Page[T any] struct {
 	MainStyle template.HTML
